@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import { Route, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../store/actions';
 import Post from '../components/Post';
 import FullPost from '../components/FullPost';
+import Spinner from '../components/Spinner';
 
-const PostContainer = props => {
-  const [ posts, setPosts ] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get('');
-      let fetched = [];
-      for (let key in res.data) {
-        fetched.push({ id: key, ...res.data[key] });
-      }
-      setPosts(fetched);
-    };
-    fetchData();
-  }, []);
+const PostContainer = ({ fetchPosts, ...props }) => {
+  useEffect(
+    () => {
+      fetchPosts();
+    },
+    [ fetchPosts ]
+  );
 
-  console.log(posts);
-  //add spinner
-  let allPosts = posts.map(post => {
+  let allPosts = props.posts.map(post => {
     return (
       <Link key={post.id} to={`/posts/${post.id}`} className="ui card">
         <Post title={post.title} body={post.body} />
@@ -28,12 +22,44 @@ const PostContainer = props => {
     );
   });
 
+  if (props.loading) {
+    allPosts = <Spinner />;
+  }
+  let messageClass = 'ui floating message hidden';
+
+  if (props.error) {
+    messageClass = 'ui floating message';
+  }
+  const hideMessage = () => {
+    console.log('clicked');
+    messageClass = 'ui floating message hidden';
+  };
+
+  //add a transition to close error message
+
   return (
     <main>
+      <div className={messageClass} onClick={hideMessage}>
+        <p>{props.error}</p>
+      </div>
       <section className="ui cards">{allPosts}</section>
       <Route path={'/posts/:id'} component={FullPost} />
     </main>
   );
 };
 
-export default PostContainer;
+const mapStateToProps = state => {
+  return {
+    posts: state.posts.posts,
+    loading: state.posts.loading,
+    error: state.posts.error
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchPosts: () => dispatch(actions.fetchPosts())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostContainer);

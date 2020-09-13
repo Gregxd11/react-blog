@@ -7,7 +7,12 @@ const FullPost = props => {
   const [ deleted, setDeleted ] = useState(false);
   useEffect(
     () => {
-      axios.get(``).then(res => setPost(res.data));
+      axios
+        .get(
+          `https://reactblog-82995.firebaseio.com/posts/${props.match.params
+            .id}.json`
+        )
+        .then(res => setPost(res.data));
       return () => {
         setDeleted(false);
       };
@@ -16,10 +21,17 @@ const FullPost = props => {
   );
 
   const deletePostHandler = async () => {
-    const res = await axios.delete(``);
+    const res = await axios.delete(
+      `https://reactblog-82995.firebaseio.com/posts/${props.match.params
+        .id}.json`
+    );
     if (res) {
       setDeleted(true);
     }
+  };
+
+  const goBackHandler = () => {
+    props.history.goBack();
   };
 
   let redirect = null;
@@ -29,6 +41,7 @@ const FullPost = props => {
   return (
     <main className="ui text container aligned center">
       {redirect}
+      <button onClick={goBackHandler}>Go back</button>
       <h1>{post.title}</h1>
       <p>{post.body}</p>
       <button onClick={deletePostHandler}>YEET</button>

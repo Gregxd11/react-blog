@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../store/actions';
 
-const NewPost = () => {
+const NewPost = props => {
   const [ title, setTitle ] = useState('');
   const [ body, setBody ] = useState('');
   const [ post, setPost ] = useState({});
@@ -14,15 +15,9 @@ const NewPost = () => {
     },
     [ body, title ]
   );
-  const getDate = () => {
-    return new Date().toLocaleString();
-  };
 
-  const submitHandler = async () => {
-    await axios.post('', {
-      ...post,
-      date: getDate()
-    });
+  const submitHandler = () => {
+    props.onSubmit(post);
     setSubmitted(true);
   };
 
@@ -62,4 +57,10 @@ const NewPost = () => {
   );
 };
 
-export default NewPost;
+const mapDispatchToProps = dispatch => {
+  return {
+    onSubmit: post => dispatch(actions.newPost(post))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(NewPost);
