@@ -31,17 +31,6 @@ export const newPost = post => {
   };
 };
 
-export const deletePost = data => {
-  return {
-    type: actionTypes.DELETE_POST,
-    data
-  };
-};
-
-export const deletePostErr = error => {
-  return { type: actionTypes.DELETE_POST_ERR, error };
-};
-
 export const fetchPostsInit = () => {
   return { type: actionTypes.FETCH_POSTS_INIT };
 };

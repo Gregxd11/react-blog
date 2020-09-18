@@ -2,24 +2,40 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const header = props => (
-  <header className="ui secondary pointing menu">
-    <div className="ui container stackable">
-      <nav style={{ display: 'flex' }}>
-        <NavLink to="/" exact className="item">
+  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button
+      className="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span className="navbar-toggler-icon" />
+    </button>
+    <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div className="navbar-nav">
+        <NavLink to="/" exact className="nav-link">
           Home
         </NavLink>
-        <NavLink to="/posts" className="item">
+        <NavLink to="/posts" className="nav-link">
           Posts
         </NavLink>
-        <NavLink to="/newpost" className="item">
+        <NavLink to="/newpost" className="nav-link">
           New Post
         </NavLink>
-        <NavLink to="/contact" className="item">
+        <NavLink to="/contact" className="nav-link">
           Contact
         </NavLink>
-      </nav>
+      </div>
+      <div className="navbar-nav ml-auto">
+        <NavLink to="/signup" className="nav-link">
+          Signup
+        </NavLink>
+      </div>
     </div>
-  </header>
+  </nav>
 );
 
 export default header;

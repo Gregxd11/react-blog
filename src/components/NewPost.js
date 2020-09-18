@@ -25,33 +25,46 @@ const NewPost = props => {
   if (submitted) {
     redirect = <Redirect to="/posts" />;
   }
-
+  // change border radius to label and input
   return (
     <React.Fragment>
       {redirect}
-      <main className="ui container center aligned">
-        <h1>New Post</h1>
-        <div className="ui big form">
-          <div className="ui labeled input">
-            <label className="ui label">Title:</label>
+      <main className="container">
+        <h1 className="text-center mt-3">New Post</h1>
+        <div className="form-group">
+          <div className="row">
+            <label
+              htmlFor="title"
+              className="badge badge-primary col-2 py-2"
+              style={{ fontSize: '1.25em' }}
+            >
+              Title
+            </label>
             <input
-              type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
-            />
-          </div>
-          <div className="field" style={{ marginTop: '50px' }}>
-            <textarea
-              style={{ resize: 'none' }}
               type="text"
-              value={body}
-              onChange={e => setBody(e.target.value)}
+              className="form-control col-10"
+              id="title"
             />
           </div>
-          <button className="ui button primary" onClick={submitHandler}>
-            SUBMIT
-          </button>
         </div>
+        <div className="form-group">
+          <label htmlFor="textarea" style={{ fontSize: '1.25em' }}>
+            Content:
+          </label>
+          <textarea
+            style={{ resize: 'none' }}
+            value={body}
+            onChange={e => setBody(e.target.value)}
+            className="form-control"
+            id="textarea"
+            rows="5"
+          />
+        </div>
+        <button className="btn btn-primary" onClick={submitHandler}>
+          SUBMIT
+        </button>
       </main>
     </React.Fragment>
   );

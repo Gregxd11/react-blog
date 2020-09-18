@@ -16,7 +16,12 @@ const PostContainer = ({ fetchPosts, ...props }) => {
 
   let allPosts = props.posts.map(post => {
     return (
-      <Link key={post.id} to={`/posts/${post.id}`} className="ui card">
+      <Link
+        key={post.id}
+        to={`/posts/${post.id}`}
+        className="card mt-3"
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
         <Post title={post.title} body={post.body} />
       </Link>
     );
@@ -25,24 +30,24 @@ const PostContainer = ({ fetchPosts, ...props }) => {
   if (props.loading) {
     allPosts = <Spinner />;
   }
-  let messageClass = 'ui floating message hidden';
+  let messageClass = 'ui floating message hidden'; // this needs to be changed to bootstrap
 
   if (props.error) {
-    messageClass = 'ui floating message';
+    messageClass = 'alert alert-danger text-center mt-3 justify-content-center';
   }
   const hideMessage = () => {
     console.log('clicked');
-    messageClass = 'ui floating message hidden';
+    messageClass = 'ui floating message hidden'; //this needs to be changed to bootstrap
   };
 
   //add a transition to close error message
 
   return (
-    <main>
+    <main className="container">
       <div className={messageClass} onClick={hideMessage}>
-        <p>{props.error}</p>
+        {props.error}
       </div>
-      <section className="ui cards">{allPosts}</section>
+      <section>{allPosts}</section>
       <Route path={'/posts/:id'} component={FullPost} />
     </main>
   );

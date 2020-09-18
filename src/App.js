@@ -5,6 +5,7 @@ import PostsContainer from './containers/PostsContainer';
 import FullPost from './components/FullPost';
 import { Route, Switch } from 'react-router-dom';
 import NewPost from './components/NewPost';
+import SignupContainer from './containers/SignupContainer';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/posts/:id" component={FullPost} />
         <Route path="/posts" component={PostsContainer} />
         <Route path="/newpost" component={NewPost} />
+        <Route path="/signup" component={SignupContainer} />
         <Route path="/" exact component={HomeContainer} />
         <Route render={() => <h1>Error</h1>} />
       </Switch>
