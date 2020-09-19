@@ -23,7 +23,7 @@ const SignupContainer = props => {
     <React.Fragment>
       {redirect}
       <main className="container">
-        <h1 className="text-center mt-3">Signup</h1>
+        <h1 className="text-center mt-3">Login</h1>
         <form
           className="form-group offset-4 justify-content-center"
           onSubmit={submitHandler}
@@ -51,8 +51,8 @@ const SignupContainer = props => {
           <button className="btn btn-primary col-6 my-3">SUBMIT</button>
           <div className="w-100" />
           <div className="offset-1">
-            <span>Already have an account? </span>
-            <Link to="/login">Login</Link>
+            <span>Don't have an account? </span>
+            <Link to="/signup">Signup</Link>
           </div>
         </form>
       </main>
@@ -62,8 +62,7 @@ const SignupContainer = props => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: (email, password) =>
-      dispatch(actions.signupStart(email, password))
+    onSubmit: (email, password) => dispatch(actions.login(email, password))
   };
 };
 

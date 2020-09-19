@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import Spinner from './Spinner';
+import { connect } from 'react-redux';
 
 const FullPost = props => {
   const [ post, setPost ] = useState([]);
@@ -29,7 +30,7 @@ const FullPost = props => {
   const deletePostHandler = async () => {
     const res = await axios.delete(
       `https://reactblog-82995.firebaseio.com/posts/${props.match.params
-        .id}.json`
+        .id}.json?auth=${props.token}`
     );
     if (res) {
       setDeleted(true);
@@ -77,4 +78,10 @@ const FullPost = props => {
   );
 };
 
-export default FullPost;
+const mapStateToProps = state => {
+  return {
+    token: state.auth.token
+  };
+};
+
+export default connect(mapStateToProps)(FullPost);

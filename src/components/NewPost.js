@@ -7,7 +7,6 @@ const NewPost = props => {
   const [ title, setTitle ] = useState('');
   const [ body, setBody ] = useState('');
   const [ post, setPost ] = useState({});
-  const [ submitted, setSubmitted ] = useState(false);
 
   useEffect(
     () => {
@@ -17,12 +16,11 @@ const NewPost = props => {
   );
 
   const submitHandler = () => {
-    props.onSubmit(post);
-    setSubmitted(true);
+    props.onSubmit(post, props.token);
   };
 
   let redirect = null;
-  if (submitted) {
+  if (props.submitted) {
     redirect = <Redirect to="/posts" />;
   }
   // change border radius to label and input
@@ -70,10 +68,17 @@ const NewPost = props => {
   );
 };
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    onSubmit: post => dispatch(actions.newPost(post))
+    token: state.auth.token,
+    submitted: state.posts.submitted
   };
 };
 
-export default connect(null, mapDispatchToProps)(NewPost);
+const mapDispatchToProps = dispatch => {
+  return {
+    onSubmit: (post, token) => dispatch(actions.newPost(post, token))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewPost);

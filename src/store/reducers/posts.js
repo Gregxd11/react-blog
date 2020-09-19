@@ -3,13 +3,15 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   posts: [],
   loading: false,
-  error: null
+  error: null,
+  submitted: false
 };
 
 const postsInit = (state, action) => {
   return {
     ...state,
-    loading: true
+    loading: true,
+    submitted: false
   };
 };
 
@@ -32,8 +34,7 @@ const postsFailed = (state, action) => {
 const createPost = (state, action) => {
   return {
     ...state,
-    loading: false,
-    error: null
+    submitted: true
   };
 };
 const createPostErr = (state, action) => {

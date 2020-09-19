@@ -30,7 +30,10 @@ const header = props => (
         </NavLink>
       </div>
       <div className="navbar-nav ml-auto">
-        <NavLink to="/signup" className="nav-link">
+        <NavLink to="/login" className="btn btn-outline-light">
+          Login
+        </NavLink>
+        <NavLink to="/signup" className="ml-2 btn btn-outline-info">
           Signup
         </NavLink>
       </div>

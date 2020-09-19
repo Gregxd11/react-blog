@@ -12,13 +12,13 @@ export const createPostErr = error => {
   return { type: actionTypes.CREATE_POST_ERR, error };
 };
 
-export const newPost = post => {
+export const newPost = (post, token) => {
   return dispatch => {
     const getDate = () => {
       return new Date().toLocaleString();
     };
     axios
-      .post('https://reactblog-82995.firebaseio.com/posts.json', {
+      .post(`https://reactblog-82995.firebaseio.com/posts.json?auth=${token}`, {
         ...post,
         date: getDate()
       })

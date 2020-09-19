@@ -1,3 +1,4 @@
+export const CREATE_POST_INIT = 'CREATE_POST_INIT';
 export const CREATE_POST = 'CREATE_POST';
 export const CREATE_POST_ERR = 'CREATE_POST_ERR';
 
@@ -16,3 +17,7 @@ export const FETCH_POSTS_FAILED = 'FETCH_POSTS_FAILED';
 export const SIGNUP_START = 'SIGNUP_START';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILED = 'SIGNUP_FAILED';
+
+export const LOGIN = 'LOGIN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILED = 'LOGIN_FAILED';
