@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 const header = props => (
@@ -30,15 +31,29 @@ const header = props => (
         </NavLink>
       </div>
       <div className="navbar-nav ml-auto">
-        <NavLink to="/login" className="btn btn-outline-light">
-          Login
-        </NavLink>
-        <NavLink to="/signup" className="ml-2 btn btn-outline-info">
-          Signup
-        </NavLink>
+        {props.isAuthenticated ? (
+          <NavLink to="/logout" className="btn btn-outline-danger">
+            Logout
+          </NavLink>
+        ) : (
+          <React.Fragment>
+            <NavLink to="/login" className="btn btn-outline-light">
+              Login
+            </NavLink>
+            <NavLink to="/signup" className="ml-2 btn btn-outline-info">
+              Signup
+            </NavLink>
+          </React.Fragment>
+        )}
       </div>
     </div>
   </nav>
 );
 
-export default header;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null
+  };
+};
+
+export default connect(mapStateToProps)(header);

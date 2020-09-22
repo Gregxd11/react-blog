@@ -69,7 +69,7 @@ const FullPost = props => {
             className="btn btn-outline-danger"
             onClick={deletePostHandler}
           >
-            YEET
+            DELETE
           </button>
         </div>
         {fullPost}

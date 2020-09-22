@@ -100,8 +100,32 @@ export const login = (email, password) => {
 export const checkAuth = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
+    let expirationDate = localStorage.getItem('expirationDate');
     if (!token) {
-      return console.log('no token');
+      return console.log('no token'); // change this to actually do something
+    }
+    else if (expirationDate <= new Date().getTime) {
+      const refreshToken = localStorage.getItem('refreshToken');
+      axios
+        .post(
+          `https://securetoken.googleapis.com/v1/token?key=${process.env
+            .REACT_APP_FIREBASE_KEY}`,
+          {
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken
+          }
+        )
+        .then(res => {
+          expirationDate = new Date(
+            new Date().getTime() + res.data.expires_in * 1000
+          );
+          localStorage.setItem('expirationDate', expirationDate);
+          localStorage.setItem('refreshToken', res.data.refresh_token);
+          localStorage.setItem('token', res.data.id_token);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
     else {
       const data = {
