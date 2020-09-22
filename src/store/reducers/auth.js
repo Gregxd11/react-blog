@@ -36,6 +36,14 @@ const loggedInFailed = (state, action) => {
   };
 };
 
+const logout = (state, action) => {
+  return {
+    ...state,
+    token: null,
+    userId: null
+  };
+};
+
 const reducer = (state = initalState, action) => {
   switch (action.type) {
     case actionTypes.SIGNUP_SUCCESS:
@@ -46,6 +54,8 @@ const reducer = (state = initalState, action) => {
       return loggedIn(state, action);
     case actionTypes.LOGIN_FAILED:
       return loggedInFailed(state, action);
+    case actionTypes.LOGOUT:
+      return logout(state, action);
     default:
       return state;
   }

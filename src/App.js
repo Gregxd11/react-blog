@@ -7,13 +7,17 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import NewPost from './components/NewPost';
 import SignupContainer from './containers/SignupContainer';
 import LoginContainer from './containers/LoginContainer';
+import Logout from './containers/Logout';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
 const App = ({ onLoad }, ...props) => {
-  useEffect(() => {
-    onLoad();
-  });
+  useEffect(
+    () => {
+      onLoad();
+    },
+    [ onLoad ]
+  );
   return (
     <React.Fragment>
       <Header />
@@ -23,6 +27,7 @@ const App = ({ onLoad }, ...props) => {
         <Route path="/newpost" component={NewPost} />
         <Route path="/signup" component={SignupContainer} />
         <Route path="/login" component={LoginContainer} />
+        <Route path="/logout" component={Logout} />
         <Route path="/" exact component={HomeContainer} />
         <Route render={() => <h1>Error</h1>} />
       </Switch>

@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+
 import axios from 'axios';
 
 // refactor signupStart and Login so the code follows DRY standards
@@ -64,6 +65,16 @@ export const loginError = error => {
   };
 };
 
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('refreshToken');
+  return {
+    type: actionTypes.LOGOUT
+  };
+};
+
 export const login = (email, password) => {
   return dispatch => {
     axios
@@ -97,43 +108,46 @@ export const login = (email, password) => {
   };
 };
 
+// refactor else statement
+
 export const checkAuth = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
     let expirationDate = localStorage.getItem('expirationDate');
     if (!token) {
-      return console.log('no token'); // change this to actually do something
-    }
-    else if (expirationDate <= new Date().getTime) {
-      const refreshToken = localStorage.getItem('refreshToken');
-      axios
-        .post(
-          `https://securetoken.googleapis.com/v1/token?key=${process.env
-            .REACT_APP_FIREBASE_KEY}`,
-          {
-            grant_type: 'refresh_token',
-            refresh_token: refreshToken
-          }
-        )
-        .then(res => {
-          expirationDate = new Date(
-            new Date().getTime() + res.data.expires_in * 1000
-          );
-          localStorage.setItem('expirationDate', expirationDate);
-          localStorage.setItem('refreshToken', res.data.refresh_token);
-          localStorage.setItem('token', res.data.id_token);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      dispatch(logout());
     }
     else {
-      const data = {
-        token,
-        userId: localStorage.getItem('userId'),
-        refreshToken: localStorage.getItem('refreshToken')
-      };
-      dispatch(loginSuccess(data));
+      if (expirationDate <= new Date().getTime) {
+        const refreshToken = localStorage.getItem('refreshToken');
+        axios
+          .post(
+            `https://securetoken.googleapis.com/v1/token?key=${process.env
+              .REACT_APP_FIREBASE_KEY}`,
+            {
+              grant_type: 'refresh_token',
+              refresh_token: refreshToken
+            }
+          )
+          .then(res => {
+            expirationDate = new Date(
+              new Date().getTime() + res.data.expires_in * 1000
+            );
+            const { refresh_token, id_token, user_id } = res.data;
+            localStorage.setItem('expirationDate', expirationDate);
+            localStorage.setItem('refreshToken', refresh_token);
+            localStorage.setItem('token', id_token);
+            const data = {
+              token: id_token,
+              userId: user_id,
+              refreshToken: refresh_token
+            };
+            dispatch(loginSuccess(data));
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     }
   };
 };

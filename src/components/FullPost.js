@@ -4,6 +4,8 @@ import { Redirect } from 'react-router-dom';
 import Spinner from './Spinner';
 import { connect } from 'react-redux';
 
+// Make delete method only visible by authenticated users and can only be deleted by users who made the post
+
 const FullPost = props => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
