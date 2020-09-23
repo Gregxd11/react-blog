@@ -67,12 +67,14 @@ const FullPost = props => {
           <button className="btn btn-outline-primary" onClick={goBackHandler}>
             Go back
           </button>
-          <button
-            className="btn btn-outline-danger"
-            onClick={deletePostHandler}
-          >
-            DELETE
-          </button>
+          {props.isAuthenticated ? (
+            <button
+              className="btn btn-outline-danger"
+              onClick={deletePostHandler}
+            >
+              DELETE
+            </button>
+          ) : null}
         </div>
         {fullPost}
       </main>
@@ -82,7 +84,8 @@ const FullPost = props => {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    isAuthenticated: state.auth.token !== null
   };
 };
 

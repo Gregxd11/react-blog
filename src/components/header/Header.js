@@ -23,9 +23,11 @@ const header = props => (
         <NavLink to="/posts" className="nav-link">
           Posts
         </NavLink>
-        <NavLink to="/newpost" className="nav-link">
-          New Post
-        </NavLink>
+        {props.isAuthenticated ? (
+          <NavLink to="/newpost" className="nav-link">
+            New Post
+          </NavLink>
+        ) : null}
         <NavLink to="/contact" className="nav-link">
           Contact
         </NavLink>

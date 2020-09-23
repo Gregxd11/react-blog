@@ -13,15 +13,20 @@ export const createPostErr = error => {
 };
 
 export const newPost = (post, token) => {
-  return dispatch => {
+  return (dispatch, getState) => {
     const getDate = () => {
       return new Date().toLocaleString();
     };
+    const { userId } = getState().auth;
     axios
-      .post(`https://reactblog-82995.firebaseio.com/posts.json?auth=${token}`, {
-        ...post,
-        date: getDate()
-      })
+      .post(
+        `https://reactblog-82995.firebaseio.com/posts/${userId}.json?auth=${token}`,
+        {
+          ...post,
+          date: getDate(),
+          userId
+        }
+      )
       .then(res => {
         dispatch(createPost(res.data));
       })
@@ -56,8 +61,10 @@ export const fetchPosts = () => {
       .get('https://reactblog-82995.firebaseio.com/posts.json')
       .then(res => {
         const fetched = [];
-        for (let key in res.data) {
-          fetched.push({ id: key, ...res.data[key] });
+        for (let user in res.data) {
+          for (let key in res.data[user]) {
+            fetched.push({ id: key, ...res.data[user][key] });
+          }
         }
         dispatch(fetchPostsSuccess(fetched));
       })
