@@ -22,7 +22,7 @@ const PostContainer = ({ fetchPosts, ...props }) => {
         className="card mt-3"
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <Post title={post.title} body={post.body} />
+        <Post title={post.title} body={post.body} date={post.date} />
       </Link>
     );
   });

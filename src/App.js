@@ -11,6 +11,8 @@ import Logout from './containers/Logout';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
+//add route guarding (new post)
+
 const App = ({ onLoad, ...props }) => {
   useEffect(
     () => {

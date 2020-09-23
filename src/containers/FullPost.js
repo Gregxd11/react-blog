@@ -5,8 +5,6 @@ import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
 import * as actions from '../store/actions';
 
-// Make delete method only visible by authenticated users
-
 const FullPost = ({ onLoad, ...props }) => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
@@ -18,7 +16,7 @@ const FullPost = ({ onLoad, ...props }) => {
     () => {
       axios.get(url).then(res => {
         setLoading(false);
-        setPost(res.data);
+        setPost({ ...res.data, date: res.data.date.split(',')[0] });
       });
       onLoad(userUrl);
       return () => {
@@ -45,8 +43,13 @@ const FullPost = ({ onLoad, ...props }) => {
 
   let fullPost = (
     <div className="container">
-      <h1 className="text-center">{post.title}</h1>
-      <p>{post.body}</p>
+      <h1 className="text-center" style={{ fontSize: '7em' }}>
+        {post.title}
+      </h1>
+      <h6 className="card-subtitle text-muted" style={{ fontSize: '1.75em' }}>
+        {post.date}
+      </h6>
+      <p style={{ fontSize: '1.5em' }}>{post.body}</p>
     </div>
   );
 
