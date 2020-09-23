@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Header from './components/header/Header';
 import HomeContainer from './containers/HomeContainer';
 import PostsContainer from './containers/PostsContainer';
-import FullPost from './components/FullPost';
+import FullPost from './containers/FullPost';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import NewPost from './components/NewPost';
 import SignupContainer from './containers/SignupContainer';
@@ -11,7 +11,7 @@ import Logout from './containers/Logout';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 
-const App = ({ onLoad }, ...props) => {
+const App = ({ onLoad, ...props }) => {
   useEffect(
     () => {
       onLoad();

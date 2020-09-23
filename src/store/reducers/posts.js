@@ -4,7 +4,8 @@ const initialState = {
   posts: [],
   loading: false,
   error: null,
-  submitted: false
+  submitted: false,
+  userUrl: null
 };
 
 const postsInit = (state, action) => {
@@ -52,6 +53,12 @@ const deletePostsErr = (state, action) => {
   };
 };
 
+const showPost = (state, action) => {
+  return {
+    ...state,
+    userUrl: action.url
+  };
+};
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_POSTS_INIT:
@@ -66,6 +73,8 @@ const reducer = (state = initialState, action) => {
       return createPostErr(state, action);
     case actionTypes.DELETE_POST_ERR:
       return deletePostsErr(state, action);
+    case actionTypes.SHOW_POST:
+      return showPost(state, action);
     default:
       return state;
   }

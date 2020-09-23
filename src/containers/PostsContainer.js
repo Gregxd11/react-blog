@@ -3,7 +3,7 @@ import { Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../store/actions';
 import Post from '../components/Post';
-import FullPost from '../components/FullPost';
+import FullPost from './FullPost';
 import Spinner from '../components/Spinner';
 
 const PostContainer = ({ fetchPosts, ...props }) => {

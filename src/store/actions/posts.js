@@ -81,3 +81,10 @@ export const deletePostsErr = error => {
     error
   };
 };
+
+export const showPost = url => {
+  return {
+    type: actionTypes.SHOW_POST,
+    url
+  };
+};

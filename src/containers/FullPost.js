@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import Spinner from './Spinner';
+import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
 import * as actions from '../store/actions';
 
-// Make delete method only visible by authenticated users and can only be deleted by users who made the post
+// Make delete method only visible by authenticated users
 
-const FullPost = props => {
+const FullPost = ({ onLoad, ...props }) => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
   const [ loading, setLoading ] = useState(true);
   const url = `https://reactblog-82995.firebaseio.com/posts/${props.match.params
     .user}/${props.match.params.id}.json`;
+  const userUrl = props.match.params.user;
   useEffect(
     () => {
       axios.get(url).then(res => {
         setLoading(false);
         setPost(res.data);
       });
-      console.log('inside');
+      onLoad(userUrl);
       return () => {
         setDeleted(false);
       };
     },
-    [ url ]
+    [ url, onLoad, userUrl ]
   );
 
   // send this to the store to redirect and show error handling message on the alert
@@ -57,7 +58,7 @@ const FullPost = props => {
   if (deleted) {
     redirect = <Redirect to="/posts" />;
   }
-  let deleteButton = props.isAuthenticated ? (
+  let deleteButton = props.isOwner ? (
     <button className="btn btn-outline-danger" onClick={deletePostHandler}>
       DELETE
     </button>
@@ -82,13 +83,14 @@ const FullPost = props => {
 const mapStateToProps = state => {
   return {
     token: state.auth.token,
-    isAuthenticated: state.auth.token !== null
+    isOwner: state.auth.userId === state.posts.userUrl
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onError: err => dispatch(actions.deletePostsErr(err))
+    onError: err => dispatch(actions.deletePostsErr(err)),
+    onLoad: url => dispatch(actions.showPost(url))
   };
 };
 
