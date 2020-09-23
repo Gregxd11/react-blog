@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import Spinner from './Spinner';
 import { connect } from 'react-redux';
+import * as actions from '../store/actions';
 
 // Make delete method only visible by authenticated users and can only be deleted by users who made the post
 
@@ -10,33 +11,31 @@ const FullPost = props => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
   const [ loading, setLoading ] = useState(true);
+  const url = `https://reactblog-82995.firebaseio.com/posts/${props.match.params
+    .user}/${props.match.params.id}.json`;
   useEffect(
     () => {
-      axios
-        .get(
-          `https://reactblog-82995.firebaseio.com/posts/${props.match.params
-            .id}.json`
-        )
-        .then(res => {
-          setLoading(false);
-          setPost(res.data);
-        });
+      axios.get(url).then(res => {
+        setLoading(false);
+        setPost(res.data);
+      });
+      console.log('inside');
       return () => {
         setDeleted(false);
       };
     },
-    [ props.match.params.id ]
+    [ url ]
   );
 
   // send this to the store to redirect and show error handling message on the alert
-  const deletePostHandler = async () => {
-    const res = await axios.delete(
-      `https://reactblog-82995.firebaseio.com/posts/${props.match.params
-        .id}.json?auth=${props.token}`
-    );
-    if (res) {
-      setDeleted(true);
-    }
+  const deletePostHandler = () => {
+    axios
+      .delete(`${url}?auth=${props.token}`)
+      .then(res => setDeleted(true))
+      .catch(err => {
+        props.onError(err.response.data.error);
+        setDeleted(true);
+      });
   };
 
   const goBackHandler = () => {
@@ -58,6 +57,11 @@ const FullPost = props => {
   if (deleted) {
     redirect = <Redirect to="/posts" />;
   }
+  let deleteButton = props.isAuthenticated ? (
+    <button className="btn btn-outline-danger" onClick={deletePostHandler}>
+      DELETE
+    </button>
+  ) : null;
 
   return (
     <React.Fragment>
@@ -67,14 +71,7 @@ const FullPost = props => {
           <button className="btn btn-outline-primary" onClick={goBackHandler}>
             Go back
           </button>
-          {props.isAuthenticated ? (
-            <button
-              className="btn btn-outline-danger"
-              onClick={deletePostHandler}
-            >
-              DELETE
-            </button>
-          ) : null}
+          {deleteButton}
         </div>
         {fullPost}
       </main>
@@ -89,4 +86,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(FullPost);
+const mapDispatchToProps = dispatch => {
+  return {
+    onError: err => dispatch(actions.deletePostsErr(err))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FullPost);

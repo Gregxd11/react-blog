@@ -45,6 +45,13 @@ const createPostErr = (state, action) => {
   };
 };
 
+const deletePostsErr = (state, action) => {
+  return {
+    ...state,
+    error: action.error
+  };
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.FETCH_POSTS_INIT:
@@ -57,6 +64,8 @@ const reducer = (state = initialState, action) => {
       return createPost(state, action);
     case actionTypes.CREATE_POST_ERR:
       return createPostErr(state, action);
+    case actionTypes.DELETE_POST_ERR:
+      return deletePostsErr(state, action);
     default:
       return state;
   }

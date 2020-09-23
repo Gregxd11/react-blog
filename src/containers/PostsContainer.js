@@ -18,7 +18,7 @@ const PostContainer = ({ fetchPosts, ...props }) => {
     return (
       <Link
         key={post.id}
-        to={`/posts/${post.id}`}
+        to={`/posts/${post.user}/${post.id}`}
         className="card mt-3"
         style={{ textDecoration: 'none', color: 'inherit' }}
       >

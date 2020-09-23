@@ -22,7 +22,7 @@ const App = ({ onLoad }, ...props) => {
     <React.Fragment>
       <Header />
       <Switch>
-        <Route path="/posts/:id" component={FullPost} />
+        <Route path="/posts/:user/:id" component={FullPost} />
         <Route path="/posts" component={PostsContainer} />
         <Route path="/newpost" component={NewPost} />
         <Route path="/signup" component={SignupContainer} />

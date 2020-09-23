@@ -1,2 +1,2 @@
-export { fetchPosts, newPost } from './posts';
+export { fetchPosts, newPost, deletePostsErr } from './posts';
 export { signupStart, login, checkAuth, logout } from './auth';

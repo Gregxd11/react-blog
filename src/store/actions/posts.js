@@ -61,9 +61,10 @@ export const fetchPosts = () => {
       .get('https://reactblog-82995.firebaseio.com/posts.json')
       .then(res => {
         const fetched = [];
+        // res returns an object with all users, therefore a nested loop is necessary
         for (let user in res.data) {
           for (let key in res.data[user]) {
-            fetched.push({ id: key, ...res.data[user][key] });
+            fetched.push({ user, id: key, ...res.data[user][key] });
           }
         }
         dispatch(fetchPostsSuccess(fetched));
@@ -71,5 +72,12 @@ export const fetchPosts = () => {
       .catch(err => {
         dispatch(fetchPostsFail(err));
       });
+  };
+};
+
+export const deletePostsErr = error => {
+  return {
+    type: actionTypes.DELETE_POST_ERR,
+    error
   };
 };
