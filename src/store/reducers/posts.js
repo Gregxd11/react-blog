@@ -42,7 +42,8 @@ const createPostErr = (state, action) => {
   return {
     ...state,
     loading: false,
-    error: action.error
+    error: action.error,
+    submitted: true
   };
 };
 

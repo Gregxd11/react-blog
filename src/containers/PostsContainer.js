@@ -30,22 +30,24 @@ const PostContainer = ({ fetchPosts, ...props }) => {
   if (props.loading) {
     allPosts = <Spinner />;
   }
-  let messageClass = 'ui floating message hidden'; // this needs to be changed to bootstrap
+  let messageClass = 'alert alert-danger alert-dismissible fade'; // this needs to be changed to bootstrap
 
   if (props.error) {
-    messageClass = 'alert alert-danger text-center mt-3 justify-content-center';
+    messageClass =
+      'alert alert-danger alert-dismissible show text-center mt-3 justify-content-center';
   }
-  const hideMessage = () => {
-    console.log('clicked');
-    messageClass = 'ui floating message hidden'; //this needs to be changed to bootstrap
-  };
-
-  //add a transition to close error message
-
   return (
     <main className="container">
-      <div className={messageClass} onClick={hideMessage}>
+      <div className={messageClass} role="alert">
         {props.error}
+        <button
+          type="button"
+          className="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <section>{allPosts}</section>
       <Route path={'/posts/:id'} component={FullPost} />
