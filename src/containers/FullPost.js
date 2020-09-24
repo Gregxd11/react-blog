@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { connect } from 'react-redux';
 import * as actions from '../store/actions';
@@ -9,9 +9,9 @@ const FullPost = ({ onLoad, ...props }) => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
   const [ loading, setLoading ] = useState(true);
-  const url = `https://reactblog-82995.firebaseio.com/posts/${props.match.params
-    .user}/${props.match.params.id}.json`;
-  const userUrl = props.match.params.user;
+  const url = `https://reactblog-82995.firebaseio.com/posts/${props.location
+    .state.userId}/${props.match.params.id}.json`;
+  const userUrl = props.location.state.userId;
   useEffect(
     () => {
       axios.get(url).then(res => {
@@ -75,6 +75,16 @@ const FullPost = ({ onLoad, ...props }) => {
           <button className="btn btn-outline-primary" onClick={goBackHandler}>
             Go back
           </button>
+          <Link
+            to={{
+              pathname: `/posts/${props.match.params.id}/edit`,
+              state: { userId: props.location.state.userId }
+            }}
+          >
+            <button style={{ color: 'white' }} className="btn btn-warning">
+              EDIT
+            </button>
+          </Link>
           {deleteButton}
         </div>
         {fullPost}

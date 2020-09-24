@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../store/actions';
 import Post from '../components/Post';
-import FullPost from './FullPost';
 import Spinner from '../components/Spinner';
 
 const PostContainer = ({ fetchPosts, ...props }) => {
@@ -18,7 +17,10 @@ const PostContainer = ({ fetchPosts, ...props }) => {
     return (
       <Link
         key={post.id}
-        to={`/posts/${post.user}/${post.id}`}
+        to={{
+          pathname: `/posts/${post.id}`,
+          state: { userId: post.user }
+        }}
         className="card mt-3"
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
@@ -36,6 +38,7 @@ const PostContainer = ({ fetchPosts, ...props }) => {
     messageClass =
       'alert alert-danger alert-dismissible show text-center mt-3 justify-content-center';
   }
+
   return (
     <main className="container">
       <div className={messageClass} role="alert">
@@ -50,7 +53,6 @@ const PostContainer = ({ fetchPosts, ...props }) => {
         </button>
       </div>
       <section>{allPosts}</section>
-      <Route path={'/posts/:id'} component={FullPost} />
     </main>
   );
 };

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter } from 'react-router-dom';
-
+import FullPost from './containers/FullPost';
 import Header from './components/header/Header';
 import HomeContainer from './containers/HomeContainer';
 import PostsContainer from './containers/PostsContainer';
-import FullPost from './containers/FullPost';
 import NewPost from './containers/NewPost';
 import SignupContainer from './containers/SignupContainer';
 import LoginContainer from './containers/LoginContainer';
 import Logout from './containers/Logout';
 import Contact from './containers/Contact';
+import EditPost from './containers/EditPost';
 
 import * as actions from './store/actions';
 
@@ -25,7 +25,9 @@ const App = ({ onLoad, ...props }) => {
     <React.Fragment>
       <Header />
       <Switch>
-        <Route path="/posts/:user/:id" component={FullPost} />
+        <Route path="/" exact component={HomeContainer} />
+        <Route path="/posts/:id/edit" component={EditPost} />
+        <Route path="/posts/:id" component={FullPost} />
         <Route path="/posts" component={PostsContainer} />
         {props.isAuthenticated ? (
           <Route path="/newpost" component={NewPost} />
@@ -34,8 +36,7 @@ const App = ({ onLoad, ...props }) => {
         <Route path="/signup" component={SignupContainer} />
         <Route path="/login" component={LoginContainer} />
         <Route path="/logout" component={Logout} />
-        <Route path="/" exact component={HomeContainer} />
-        <Route render={() => <h1 className="text-center">Error</h1>} />
+        <Route path="*" render={() => <h1 className="text-center">Error</h1>} />
       </Switch>
     </React.Fragment>
   );
