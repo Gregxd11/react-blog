@@ -11,6 +11,7 @@ import LoginContainer from './containers/LoginContainer';
 import Logout from './containers/Logout';
 import Contact from './containers/Contact';
 import EditPost from './containers/EditPost';
+import './App.module.css';
 
 import * as actions from './store/actions';
 

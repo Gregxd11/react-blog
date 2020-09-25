@@ -1,7 +1,7 @@
 import React from 'react';
 
 const post = props => (
-  <div className="card-body">
+  <div className="card-body" style={{ whiteSpace: 'pre-wrap' }}>
     <h1 className="card-title text-center" style={{ fontSize: '7rem' }}>
       {props.title}
     </h1>

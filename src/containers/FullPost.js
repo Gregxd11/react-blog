@@ -9,15 +9,31 @@ const FullPost = ({ onLoad, ...props }) => {
   const [ post, setPost ] = useState([]);
   const [ deleted, setDeleted ] = useState(false);
   const [ loading, setLoading ] = useState(true);
-  const url = `https://reactblog-82995.firebaseio.com/posts/${props.location
-    .state.userId}/${props.match.params.id}.json`;
-  const userUrl = props.location.state.userId;
+
+  let url;
+  let userUrl;
+
+  //This handles error in case url is typed wrong, it prevents crashing the app...there's probably a much cleaner way to do this
+  if (props.location.state === undefined) {
+    url = '#';
+    userUrl = undefined;
+    props.history.push('/posts');
+  }
+  else {
+    url = `https://reactblog-82995.firebaseio.com/posts/${props.location.state
+      .userId}/${props.match.params.id}.json`;
+    userUrl = props.location.state.userId;
+  }
+
   useEffect(
     () => {
-      axios.get(url).then(res => {
-        setLoading(false);
-        setPost({ ...res.data, date: res.data.date.split(',')[0] });
-      });
+      axios
+        .get(url)
+        .then(res => {
+          setLoading(false);
+          setPost({ ...res.data, date: res.data.date.split(',')[0] });
+        })
+        .catch(err => console.log(err));
       onLoad(userUrl);
       return () => {
         setDeleted(false);
@@ -41,6 +57,11 @@ const FullPost = ({ onLoad, ...props }) => {
     props.history.goBack();
   };
 
+  let redirect = null;
+  if (deleted) {
+    redirect = <Redirect to="/posts" />;
+  }
+
   let fullPost = (
     <div className="container">
       <h1 className="text-center" style={{ fontSize: '7em' }}>
@@ -57,35 +78,31 @@ const FullPost = ({ onLoad, ...props }) => {
     fullPost = <Spinner />;
   }
 
-  let redirect = null;
-  if (deleted) {
-    redirect = <Redirect to="/posts" />;
-  }
-  let deleteButton = props.isOwner ? (
-    <button className="btn btn-outline-danger" onClick={deletePostHandler}>
-      DELETE
-    </button>
+  let ownerButtons = props.isOwner ? (
+    <React.Fragment>
+      <Link
+        to={{
+          pathname: `/posts/${props.match.params.id}/edit`,
+          state: { userId: userUrl }
+        }}
+      >
+        <button className="btn btn-secondary">EDIT</button>
+      </Link>
+      <button className="btn btn-danger ml-3" onClick={deletePostHandler}>
+        DELETE
+      </button>
+    </React.Fragment>
   ) : null;
 
   return (
     <React.Fragment>
       {redirect}
-      <main className="container mt-3">
-        <div className="row justify-content-between">
-          <button className="btn btn-outline-primary" onClick={goBackHandler}>
+      <main className="container mt-5">
+        <div className="row justify-content-between mb-5">
+          <button className="btn btn-primary" onClick={goBackHandler}>
             Go back
           </button>
-          <Link
-            to={{
-              pathname: `/posts/${props.match.params.id}/edit`,
-              state: { userId: props.location.state.userId }
-            }}
-          >
-            <button style={{ color: 'white' }} className="btn btn-warning">
-              EDIT
-            </button>
-          </Link>
-          {deleteButton}
+          <div className="row">{ownerButtons}</div>
         </div>
         {fullPost}
       </main>
